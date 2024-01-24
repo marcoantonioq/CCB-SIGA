@@ -8,8 +8,10 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./server/src/db:/app/server/src/db
-      - ./server/src/config/config.json:/app/server/src/config/config.json
+      - siga_db:/app/server/src/db
+      - siga_config:/app/server/src/config
+    networks:
+      - siga_network
   nginx_siga:
     container_name: nginx_siga
     image: nginx
@@ -18,3 +20,12 @@ services:
       - "3010:3000"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - siga_network
+networks:
+  siga_network:
+    driver: bridge
+
+volumes:
+  siga_db:
+  siga_config:
