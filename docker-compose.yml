@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./server/src/db/database.db:/app/server/src/db/database.db
+      - ./server/src/db:/app/server/src/db
       - ./server/src/config/config.json:/app/server/src/config/config.json
   nginx_siga:
     container_name: nginx_siga
