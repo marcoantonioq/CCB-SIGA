@@ -1,0 +1,41 @@
+// Definições relacionadas ao banco de dados
+datasource db {
+    provider = "sqlite"
+    url      = "file:../../db/database.db"
+}
+
+// Configurações do Prisma Client
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Igreja {
+    id      String   @id @unique
+    nome    String
+    membros Int      @default(0)
+    Fluxo   Fluxo[]
+    Tarefas Tarefa[]
+}
+
+model Fluxo {
+    id          String    @id @unique
+    fluxo       String
+    categoria   String
+    data        DateTime
+    valor       Float     @default(0.0)
+    detalhes    String?
+    ref         String?
+    competencia String?
+    created     DateTime? @default(now())
+    updated     DateTime? @updatedAt
+    igrejaId    String
+    Igreja      Igreja    @relation(fields: [igrejaId], references: [id])
+}
+
+model Tarefa {
+    id          Int    @id @default(autoincrement())
+    description String
+    status      String
+    igrejaId    String
+    Igreja      Igreja @relation(fields: [igrejaId], references: [id])
+}

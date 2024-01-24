@@ -1,0 +1,7 @@
+package-lock.json
+node_modules
+src/config/config.json
+migrations
+database.db
+database.db-journal
+secret.json

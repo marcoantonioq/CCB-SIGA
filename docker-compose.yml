@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  server_siga:
+    container_name: server_siga
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./server/src/db:/app/server/src/db
+      - ./server/config/config.json:/app/server/config/config.json
+  nginx_siga:
+    container_name: nginx_siga
+    image: nginx
+    restart: always
+    ports:
+      - "3010:3000"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
