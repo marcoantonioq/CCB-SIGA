@@ -9,7 +9,7 @@ services:
     restart: always
     volumes:
       - ./server/src/db:/app/server/src/db
-      - ./server/config/config.json:/app/server/config/config.json
+      - ./server/src/config/config.json:/app/server/src/config/config.json
   nginx_siga:
     container_name: nginx_siga
     image: nginx
