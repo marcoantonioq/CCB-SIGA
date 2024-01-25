@@ -1,11 +1,4 @@
-import {
-  alterarIGreja,
-  getOfertas,
-  setCopetencia,
-  getTarefas,
-  getIgrejas,
-  getListaFechamentos,
-} from "./actions";
+import * as siga from "./actions";
 
 import {
   Igreja,
@@ -21,6 +14,7 @@ import { TarefaRepositoryPrisma } from "./TarefaRepo";
 
 export class AppSIGA {
   private onSync = false;
+  public siga = siga;
 
   private constructor(
     private config: {},
@@ -38,7 +32,7 @@ export class AppSIGA {
 
   private async syncIgrejas() {
     let igrejas: Igreja[] = [];
-    igrejas = await getIgrejas();
+    igrejas = await this.siga.getIgrejas();
     console.info(`\nIgrejas coletadas: ${igrejas.length}`);
     for (const igreja of igrejas) {
       this.repoIgreja.save(igreja);
@@ -56,7 +50,7 @@ export class AppSIGA {
 
     // Ofertas
     console.info(`\nColetando ofertas de ${igreja.nome}...`);
-    for (const data of await getOfertas(firstDay, lastDay)) {
+    for (const data of await siga.getOfertas(firstDay, lastDay)) {
       try {
         data.fluxo = "Entrada";
         data.igrejaId = igreja.id;
@@ -68,7 +62,7 @@ export class AppSIGA {
     }
     // Fechamentos
     console.info(`\nColetando fechamento de ${igreja.nome}...`);
-    for (const data of await getListaFechamentos(firstDay, lastDay)) {
+    for (const data of await siga.getListaFechamentos(firstDay, lastDay)) {
       try {
         data.igrejaId = igreja.id;
         fluxos.push(data);
@@ -96,8 +90,8 @@ export class AppSIGA {
     }
     for (const ref of refs) {
       try {
-        await setCopetencia(ref);
-        (await getTarefas()).forEach((e) => {
+        await siga.setCopetencia(ref);
+        (await siga.getTarefas()).forEach((e) => {
           e.igrejaId = igreja.id;
           tarefas.push(e);
           this.repoTarefa.save(e);
@@ -126,7 +120,7 @@ export class AppSIGA {
 
       for (const igreja of igrejas) {
         // Selecionar Igreja
-        await alterarIGreja(igreja);
+        await siga.alterarIGreja(igreja);
 
         const fluxos = await this.syncOfertasAndFechamentos(
           igreja,
@@ -149,8 +143,10 @@ export class AppSIGA {
         // const tarefas = await this.syncTarefas(igreja, fluxos);
       }
       console.log("\n\nFIM!!!");
+      return true;
     } catch (error) {
       console.log("Erro na aplicação SIGA: ", error);
+      return false;
     } finally {
       this.onSync = false;
     }

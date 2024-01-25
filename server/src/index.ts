@@ -7,12 +7,16 @@ const app = AppSIGA.create({});
 startHTTP(app);
 
 async function startSync(date: Date) {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  await app.sync(firstDay, lastDay);
-  await saveGoogle(app);
+  try {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    await app.sync(firstDay, lastDay);
+    await saveGoogle(app);
+  } catch (error) {
+    console.log("Falha ao realizar o sync siga: ", date);
+  }
 }
 
 // Cada duas horas
@@ -27,6 +31,11 @@ async function lastMonths(months: number) {
     await startSync(date);
     date.setMonth(date.getMonth() - 1);
   }
+  // Manter o cookie ativo
+  schedule.scheduleJob("0 */20 * * *", async () => {
+    console.log("Manter cookie!");
+    app.siga.getIgrejas();
+  });
 }
 
-lastMonths(12);
+lastMonths(13);

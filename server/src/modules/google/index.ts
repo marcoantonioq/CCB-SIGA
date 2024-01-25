@@ -90,7 +90,7 @@ export async function saveGoogle(app: AppSIGA) {
           ?.nome.replace(/BR \d+-\d+ - /gi, "")
           .trim() || "",
         categoria || "",
-        data.toISOString().split("T")[0],
+        new Date(data).toISOString().split("T")[0],
         parseFloat(`${valor}`.replace(/,/gi, ".").replace(/(R\$| )/gi, "")),
         "",
         "SIGA",
@@ -99,25 +99,27 @@ export async function saveGoogle(app: AppSIGA) {
       ]),
       ...(
         await sheet.getTableData("Gastos!A2:F")
-      ).map(([fluxo, igreja, categoria, data, valor, obs]) => {
-        const [yyyy, mm, dd] = data.split("-");
-        return [
-          fluxo,
-          igreja,
-          categoria,
-          data,
-          parseFloat(`${valor}`.replace(/,/gi, ".").replace(/(R\$| )/gi, "")),
-          obs || "",
-          "MANUAL",
-          `${mm}/${yyyy}`,
-          "",
-        ];
-      }),
+      )
+        .filter((e) => e[0] && e[1])
+        .map(([fluxo, igreja, categoria, data, valor, obs]) => {
+          const [yyyy, mm, dd] = data.split("-");
+          return [
+            fluxo,
+            igreja,
+            categoria,
+            new Date(data).toISOString().split("T")[0],
+            parseFloat(`${valor}`.replace(/,/gi, ".").replace(/(R\$| )/gi, "")),
+            obs || "",
+            "MANUAL",
+            `${mm}/${yyyy}`,
+            "",
+          ];
+        }),
     ].sort((a, b) => {
       const dataA = new Date(a[3]);
       const dataB = new Date(b[3]);
       if (isNaN(dataA.getTime()) || isNaN(dataB.getTime())) {
-        console.error("Erro na conversão de data.");
+        console.error("Erro na conversão de data: ", dataA, dataB);
         return 0;
       }
       return dataB.getTime() - dataA.getTime();
