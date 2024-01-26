@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./src/index.ts",
     "dev": "npx nodemon --watch src",
-    "migrate": "PRISMA_MIGRATE_NON_INTERACTIVE=true prisma migrate dev --name init --schema src/infra/prisma/schema.prisma"
+    "migrate": "PRISMA_MIGRATE_NON_INTERACTIVE=true prisma migrate dev --name init --schema src/infra/prisma/schema.prisma",
+    "apply": "PRISMA_MIGRATE_NON_INTERACTIVE=true prisma migrate apply --schema src/infra/prisma/schema.prisma"
   },
   "author": "",
   "license": "ISC",

@@ -77,7 +77,7 @@ class GoogleSheetsService {
     }
   }
 
-  public async getTableData(range: string): Promise<string[][]> {
+  public async getTableData(range: string): Promise<any[][]> {
     try {
       const response = await this.sheets.spreadsheets.values.get({
         spreadsheetId: this.spreadsheetId,

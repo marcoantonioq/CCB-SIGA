@@ -12,7 +12,27 @@ async function startSync(date: Date) {
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
+    firstDay.setHours(0, 0, 0, 0);
+    lastDay.setHours(0, 0, 0, 0);
     await app.sync(firstDay, lastDay);
+
+    // Remover itens não existente no siga
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    for (const fluxo of await app.repoFluxo.getAll()) {
+      fluxo.updated.setHours(0, 0, 0, 0);
+      if (
+        fluxo.data >= firstDay &&
+        fluxo.data <= lastDay &&
+        fluxo.updated < currentDate
+      ) {
+        console.log(
+          "\x1b[31m%s\x1b[0m",
+          `Removendo item não existente no siga: ${fluxo}`
+        );
+        await app.repoFluxo.delete(fluxo);
+      }
+    }
     await saveGoogle(app);
   } catch (error) {
     console.log("Falha ao realizar o sync siga: ", date);

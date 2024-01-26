@@ -148,7 +148,7 @@ export async function getOfertas(data1: Date, data2: Date): Promise<Fluxo[]> {
 
   try {
     const result = await sendRequest({ url, method: "POST", data });
-    return result.data.d.aaData.map((e: any) => {
+    const ofertas = result.data.d.aaData.map((e: any) => {
       const [, m, y] = e.sData.split("/");
       return <Fluxo>{
         id: String(e.Codigo),
@@ -158,8 +158,11 @@ export async function getOfertas(data1: Date, data2: Date): Promise<Fluxo[]> {
         competencia: String(e.CodigoCompetencia),
         categoria: String(e.NomeTipoCulto),
         valor: Number(e.ValorTotal),
+        updated: new Date(),
+        created: new Date(),
       };
     });
+    return ofertas;
   } catch (erro) {
     throw await handleErro(erro as AxiosError);
   }

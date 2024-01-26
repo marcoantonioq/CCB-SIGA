@@ -29,7 +29,7 @@ export async function saveGoogle(app: AppSIGA) {
   };
 
   // Igrejas
-  console.log("Enviados Igrejas para GoogleSheet!");
+  console.log("\x1b[34m%s\x1b[0m", "Enviando igrejas para GoogleSheet!");
   const oldIgrejas = [
     { nome: "GOIÁS - POVOADO DE AREIAS", membros: 37 },
     { nome: "POVOADO DE MIRANDÓPOLIS", membros: 18 },
@@ -49,7 +49,7 @@ export async function saveGoogle(app: AppSIGA) {
   );
 
   // Tarefas
-  console.log("Enviados Tarefas para GoogleSheet!");
+  console.log("\x1b[34m%s\x1b[0m", "Enviando Tarefas para GoogleSheet!");
   await createData(
     "SIGA-Tarefas",
     ["IGREJA", "DESCRIÇÃO", "STATUS"],
@@ -65,8 +65,70 @@ export async function saveGoogle(app: AppSIGA) {
     ])
   );
 
+  const formatValor = (valor: string): number => {
+    try {
+      const newValue =
+        parseFloat(`${valor}`.replace(/[^\d,]/g, "").replace(",", ".")) || 0;
+      return newValue;
+    } catch (error) {
+      console.log(
+        "\x1b[31m%s\x1b[0m",
+        `Erro ao formatar: ${valor}\t\t${valor}`
+      );
+      return 0;
+    }
+  };
+
   // Ofertas
-  console.log("Enviados Ofertas para GoogleSheet!");
+  console.log("\x1b[34m%s\x1b[0m", "Enviando ofertas para GoogleSheet!");
+  const dadosGastos = await sheet.getTableData("Gastos!A2:F");
+  const valuesFluxos = [
+    ...(await app.repoFluxo.getAll()).map(
+      ({ id, fluxo, igrejaId, categoria, data, valor, ref }) => {
+        return [
+          fluxo,
+          igrejas
+            .find((i) => i.id === igrejaId)
+            ?.nome.replace(/BR \d+-\d+ - /gi, "")
+            .trim() || "",
+          categoria || "",
+          new Date(data).toISOString().split("T")[0],
+          formatValor(`${valor}`),
+          "",
+          "SIGA",
+          `${ref}`,
+          `${id}`,
+        ];
+      }
+    ),
+    ...dadosGastos
+      .filter((e) => e[0] && e[1])
+      .map(([fluxo, igreja, categoria, data, valor, obs]) => {
+        const [yyyy, mm, dd] = data.split("-");
+        return [
+          fluxo,
+          igreja,
+          categoria,
+          new Date(data).toISOString().split("T")[0],
+          formatValor(`${valor}`),
+          obs || "",
+          "MANUAL",
+          `${mm}/${yyyy}`,
+          "",
+        ];
+      }),
+  ].sort((a, b) => {
+    const dataA = new Date(a[3]);
+    const dataB = new Date(b[3]);
+    if (isNaN(dataA.getTime()) || isNaN(dataB.getTime())) {
+      console.log(
+        "\x1b[31m%s\x1b[0m",
+        `Erro na conversão de data: ${dataA} e  ${dataB}`
+      );
+      return 0;
+    }
+    return dataB.getTime() - dataA.getTime();
+  });
   await createData(
     "SIGA-Fluxo",
     [
@@ -80,49 +142,6 @@ export async function saveGoogle(app: AppSIGA) {
       "REF.",
       "ID",
     ],
-    [
-      ...(
-        await app.repoFluxo.getAll()
-      ).map(({ id, fluxo, igrejaId, categoria, data, valor, ref }) => [
-        fluxo,
-        igrejas
-          .find((i) => i.id === igrejaId)
-          ?.nome.replace(/BR \d+-\d+ - /gi, "")
-          .trim() || "",
-        categoria || "",
-        new Date(data).toISOString().split("T")[0],
-        parseFloat(`${valor}`.replace(/,/gi, ".").replace(/(R\$| )/gi, "")),
-        "",
-        "SIGA",
-        `${ref}`,
-        `${id}`,
-      ]),
-      ...(
-        await sheet.getTableData("Gastos!A2:F")
-      )
-        .filter((e) => e[0] && e[1])
-        .map(([fluxo, igreja, categoria, data, valor, obs]) => {
-          const [yyyy, mm, dd] = data.split("-");
-          return [
-            fluxo,
-            igreja,
-            categoria,
-            new Date(data).toISOString().split("T")[0],
-            parseFloat(`${valor}`.replace(/,/gi, ".").replace(/(R\$| )/gi, "")),
-            obs || "",
-            "MANUAL",
-            `${mm}/${yyyy}`,
-            "",
-          ];
-        }),
-    ].sort((a, b) => {
-      const dataA = new Date(a[3]);
-      const dataB = new Date(b[3]);
-      if (isNaN(dataA.getTime()) || isNaN(dataB.getTime())) {
-        console.error("Erro na conversão de data: ", dataA, dataB);
-        return 0;
-      }
-      return dataB.getTime() - dataA.getTime();
-    })
+    valuesFluxos
   );
 }
