@@ -1,5 +1,3 @@
-import * as siga from "./request/actions";
-
 import {
   IgrejaRepository,
   TarefaRepository,
@@ -13,7 +11,6 @@ import { reportDespesas } from "./request/report_despesas";
 
 export class AppSIGA {
   private onSync = false;
-  public siga = siga;
 
   private constructor(
     public repoIgreja: IgrejaRepository,
