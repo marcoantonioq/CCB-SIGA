@@ -1,6 +1,8 @@
 import axios from "axios";
 import * as xlsx from "xlsx";
 import { AppConfig } from "../../../config";
+import { alterarParaIgreja } from "./igreja_alterar";
+import { Fluxo } from "../AppInterfaces";
 
 interface Despesa {
   Ref: string;
@@ -21,7 +23,11 @@ function convertExcelDateToJSDate(excelDate: number) {
   return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
 }
 
-export async function reportDespesas(data1: Date, data2: Date) {
+export async function reportDespesas(
+  data1: Date,
+  data2: Date
+): Promise<Fluxo[]> {
+  await alterarParaIgreja({ id: "345", nome: "", membros: 0 });
   const despesas: Despesa[] = [];
 
   const headers = {
@@ -98,5 +104,21 @@ export async function reportDespesas(data1: Date, data2: Date) {
   } catch (error) {
     console.error("Erro na requisição:", error);
   }
-  return despesas;
+
+  return despesas.map(
+    (e) =>
+      <Fluxo>{
+        id: "",
+        fluxo: "Entrada",
+        categoria: e.Despesa,
+        data: e.Data,
+        valor: Number(e.Total),
+        detalhes: e.Fornecedor,
+        ref: e.Ref,
+        competencia: "",
+        created: new Date(),
+        updated: new Date(),
+        igrejaId: e.Localidade,
+      }
+  );
 }

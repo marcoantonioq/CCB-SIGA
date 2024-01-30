@@ -1,17 +1,9 @@
 import axios from "axios";
 import { AppConfig } from "../../../config";
 import { Fluxo } from "../AppInterfaces";
-import { alterarParaIgreja } from "./igreja_alterar";
 
-export async function reportOfertas(
-  igrejaID: string,
-  data1: Date,
-  data2: Date
-) {
+export async function reportOfertas(data1: Date, data2: Date) {
   const ofertas: Fluxo[] = [];
-
-  await alterarParaIgreja({ id: igrejaID, nome: "", membros: 0 });
-
   const url = "https://siga.congregacao.org.br/TES/TES00401.asmx/Selecionar";
 
   const data = {
@@ -54,8 +46,6 @@ export async function reportOfertas(
   return ofertas;
 }
 
-reportOfertas("4252", new Date("2023-12-01"), new Date("2023-12-10")).then(
-  (result) => {
-    console.log("Ofertas: ", result);
-  }
-);
+reportOfertas(new Date("2023-12-01"), new Date("2024-02-01")).then((result) => {
+  console.log("Ofertas: ", result);
+});
