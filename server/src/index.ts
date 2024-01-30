@@ -4,6 +4,7 @@ import { startHTTP } from "./infra/express/index";
 import { saveGoogle } from "./modules/google";
 
 const app = AppSIGA.create({});
+
 startHTTP(app);
 
 async function startSync(date: Date) {
@@ -17,23 +18,23 @@ async function startSync(date: Date) {
     await app.sync(firstDay, lastDay);
 
     // Remover itens não existente no siga
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    for (const fluxo of await app.repoFluxo.getAll()) {
-      fluxo.updated.setHours(0, 0, 0, 0);
-      if (
-        fluxo.data >= firstDay &&
-        fluxo.data <= lastDay &&
-        fluxo.updated < currentDate
-      ) {
-        console.log(
-          "\x1b[31m%s\x1b[0m",
-          `Removendo item não existente no siga: ${fluxo}`
-        );
-        await app.repoFluxo.delete(fluxo);
-      }
-    }
-    await saveGoogle(app);
+    // const currentDate = new Date();
+    // currentDate.setHours(0, 0, 0, 0);
+    // for (const fluxo of await app.repoFluxo.getAll()) {
+    //   fluxo.updated.setHours(0, 0, 0, 0);
+    //   if (
+    //     fluxo.data >= firstDay &&
+    //     fluxo.data <= lastDay &&
+    //     fluxo.updated < currentDate
+    //   ) {
+    //     console.log(
+    //       "\x1b[31m%s\x1b[0m",
+    //       `Removendo item não existente no siga: ${fluxo}`
+    //     );
+    //     await app.repoFluxo.delete(fluxo);
+    //   }
+    // }
+    // await saveGoogle(app);
   } catch (error) {
     console.log("Falha ao realizar o sync siga: ", date);
   }
@@ -58,4 +59,4 @@ async function lastMonths(months: number) {
   });
 }
 
-lastMonths(13);
+lastMonths(1);

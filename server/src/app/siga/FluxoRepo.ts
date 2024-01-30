@@ -14,7 +14,7 @@ export class FluxoRepositoryPrisma
   async save(fluxo: Fluxo): Promise<Fluxo> {
     const obj = FluxoCore.create(fluxo);
     try {
-      await database.fluxo.upsert({
+      await database?.fluxo.upsert({
         where: { id: obj.id },
         update: obj,
         create: obj,
@@ -30,7 +30,7 @@ export class FluxoRepositoryPrisma
   async delete(fluxo: Fluxo): Promise<Fluxo> {
     try {
       const deleted = FluxoCore.create(
-        (await database.fluxo.delete({
+        (await database?.fluxo.delete({
           where: { id: fluxo.id },
         })) as Fluxo
       );
@@ -44,7 +44,7 @@ export class FluxoRepositoryPrisma
 
   async getAll(): Promise<Fluxo[]> {
     try {
-      return (await database.fluxo.findMany()).map((e: any) =>
+      return ((await database?.fluxo.findMany()) || []).map((e: any) =>
         FluxoCore.create(e)
       );
     } catch (error) {
@@ -55,7 +55,7 @@ export class FluxoRepositoryPrisma
 
   async getById(id: string): Promise<Fluxo | undefined> {
     try {
-      const fluxo = await database.fluxo.findUnique({
+      const fluxo = await database?.fluxo.findUnique({
         where: { id },
       });
       if (fluxo) return FluxoCore.create(fluxo as Fluxo);

@@ -8,9 +8,11 @@ import { setupRoutes } from "./routes";
 import { setupSocketIO } from "./socket";
 import { AppSIGA } from "../../app/siga";
 
+export let server: http.Server | null = null;
+
 export function startHTTP(app: AppSIGA) {
   const appExpress: Express = express();
-  const server: http.Server = http.createServer(appExpress);
+  server = http.createServer(appExpress);
   const io: Server = new Server(server, {
     cors: {
       origin: "*",

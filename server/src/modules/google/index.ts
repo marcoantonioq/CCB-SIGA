@@ -28,26 +28,6 @@ export async function saveGoogle(app: AppSIGA) {
     }
   };
 
-  // Igrejas
-  console.log("\x1b[34m%s\x1b[0m", "Enviando igrejas para GoogleSheet!");
-  const oldIgrejas = [
-    { nome: "GOIÁS - POVOADO DE AREIAS", membros: 37 },
-    { nome: "POVOADO DE MIRANDÓPOLIS", membros: 18 },
-    { nome: "MOSSÂMEDES - VILA DAMIANA DA CUNHA", membros: 55 },
-    { nome: "GOIÁS - POVOADO COLÔNIA DE UVÁ", membros: 15 },
-    { nome: "GOIÁS - CENTRO", membros: 96 },
-    { nome: "GOIÁS - VILA LIONS", membros: 28 },
-  ];
-  await createData(
-    "SIGA-Igrejas",
-    ["ID", "IGREJA", "MEMBROS"],
-    igrejas.map(({ id, nome, membros }) => [
-      Number(`${id}`),
-      nome.replace(/BR \d+-\d+ - /gi, ""),
-      Number(`${oldIgrejas.find((e) => nome.includes(e.nome))?.membros}`),
-    ])
-  );
-
   // Tarefas
   console.log("\x1b[34m%s\x1b[0m", "Enviando Tarefas para GoogleSheet!");
   await createData(
@@ -143,5 +123,25 @@ export async function saveGoogle(app: AppSIGA) {
       "ID",
     ],
     valuesFluxos
+  );
+
+  // Igrejas
+  console.log("\x1b[34m%s\x1b[0m", "Enviando igrejas para GoogleSheet!");
+  const oldIgrejas = [
+    { nome: "GOIÁS - POVOADO DE AREIAS", membros: 37 },
+    { nome: "POVOADO DE MIRANDÓPOLIS", membros: 18 },
+    { nome: "MOSSÂMEDES - VILA DAMIANA DA CUNHA", membros: 55 },
+    { nome: "GOIÁS - POVOADO COLÔNIA DE UVÁ", membros: 15 },
+    { nome: "GOIÁS - CENTRO", membros: 96 },
+    { nome: "GOIÁS - VILA LIONS", membros: 28 },
+  ];
+  await createData(
+    "SIGA-Igrejas",
+    ["ID", "IGREJA", "MEMBROS"],
+    igrejas.map(({ id, nome, membros }) => [
+      Number(`${id}`),
+      nome.replace(/BR \d+-\d+ - /gi, ""),
+      Number(`${oldIgrejas.find((e) => nome.includes(e.nome))?.membros}`),
+    ])
   );
 }

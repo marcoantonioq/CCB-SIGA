@@ -14,7 +14,7 @@ export class TarefaRepositoryPrisma
   async save(tarefa: Tarefa): Promise<Tarefa> {
     const obj = TarefaCore.create(tarefa);
     try {
-      await database.tarefa.upsert({
+      await database?.tarefa.upsert({
         where: { id: obj.id },
         update: obj,
         create: obj,
@@ -30,7 +30,7 @@ export class TarefaRepositoryPrisma
   async delete(tarefa: Tarefa): Promise<Tarefa> {
     try {
       const deleted = TarefaCore.create(
-        (await database.tarefa.delete({
+        (await database?.tarefa.delete({
           where: { id: tarefa.id },
         })) as Tarefa
       );
@@ -44,7 +44,7 @@ export class TarefaRepositoryPrisma
 
   async getAll(): Promise<Tarefa[]> {
     try {
-      return (await database.tarefa.findMany()).map((e: Tarefa) =>
+      return ((await database?.tarefa.findMany()) || []).map((e: Tarefa) =>
         TarefaCore.create(e)
       );
     } catch (error) {
@@ -55,7 +55,7 @@ export class TarefaRepositoryPrisma
 
   async getById(id: number): Promise<Tarefa | undefined> {
     try {
-      const tarefa = await database.tarefa.findUnique({
+      const tarefa = await database?.tarefa.findUnique({
         where: { id },
       });
       if (tarefa) return TarefaCore.create(tarefa as Tarefa);

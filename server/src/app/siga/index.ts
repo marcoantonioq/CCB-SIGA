@@ -1,4 +1,4 @@
-import * as siga from "./actions";
+import * as siga from "./request/actions";
 
 import {
   Igreja,
@@ -115,6 +115,14 @@ export class AppSIGA {
           lastDay.toISOString().split("T")[0]
         }...`
       );
+
+      await siga.alterarIGreja({
+        id: "345",
+        membros: 0,
+        nome: "ADM - ITABERAÍ",
+      });
+      await siga.getRelaDespesa(firstDay, lastDay);
+      return;
 
       const igrejas = await this.syncIgrejas();
 
