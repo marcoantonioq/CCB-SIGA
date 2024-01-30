@@ -15,6 +15,7 @@ enum EVENTS {
 export function setupSocketIO(io: Server, app: AppSIGA): void {
   io.on(EVENTS.CONNECT, async (socket: Socket) => {
     const { token } = socket.handshake.auth;
+    console.log("Token enviado: ", token);
 
     console.log("Cliente conectado:", socket.id);
     socket.emit(EVENTS.MESSAGE, "Conectado");

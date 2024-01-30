@@ -3,20 +3,6 @@ import { AppConfig } from "../../../config";
 import * as cheerio from "cheerio";
 import { Igreja } from "../AppInterfaces";
 
-interface Despesa {
-  Ref: string;
-  Localidade: string;
-  Data: Date;
-  Tipo: string;
-  NumeroDoc: string;
-  Despesa: string;
-  Fornecedor: string;
-  Valor: string;
-  Multa: string;
-  Juros: string;
-  Desconto: string;
-  Total: string;
-}
 export async function reportIgrejas() {
   const url = "https://siga.congregacao.org.br/SIS/SIS99908.aspx";
   const igrejas: Igreja[] = [];

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AppConfig } from "../../../config";
 import { Fluxo } from "../AppInterfaces";
-import { igrejaAlterar } from "./igreja_alterar";
+import { alterarParaIgreja } from "./igreja_alterar";
 
 export async function reportOfertas(
   igrejaID: string,
@@ -10,7 +10,7 @@ export async function reportOfertas(
 ) {
   const ofertas: Fluxo[] = [];
 
-  await igrejaAlterar({ id: igrejaID, nome: "", membros: 0 });
+  await alterarParaIgreja({ id: igrejaID, nome: "", membros: 0 });
 
   const url = "https://siga.congregacao.org.br/TES/TES00401.asmx/Selecionar";
 

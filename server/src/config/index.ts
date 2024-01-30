@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 import { server } from "../infra/express";
 const { spawn } = require("child_process");
 

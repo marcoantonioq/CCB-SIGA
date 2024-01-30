@@ -1,18 +1,18 @@
-import { Express, Request, Response, NextFunction } from "express";
+import { Express, Request, Response } from "express";
 import { AppSIGA } from "../../app/siga";
 import { AppConfig, saveConfig } from "../../config";
-import path from "path";
-import express from "express";
+import * as path from "path";
+import * as express from "express";
 import { saveGoogle } from "../../modules/google";
 
 export function setupRoutes(router: Express, app: AppSIGA): void {
   router.use("/", express.static(path.resolve(__dirname, "dist")));
 
-  router.get("/api", (req: Request, res: Response) => {
+  router.get("/api", (_req: Request, res: Response) => {
     res.json({ message: "Teste resposta da API" });
   });
 
-  router.get("/api/dados", async (req: Request, res: Response) => {
+  router.get("/api/dados", async (_req: Request, res: Response) => {
     res.json({
       message: "Dados",
       data: {

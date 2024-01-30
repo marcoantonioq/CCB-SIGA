@@ -71,7 +71,9 @@ class GoogleSheetsService {
           ],
         },
       });
-      console.log(`A tabela "${table}" foi criada com sucesso.`);
+      if (createResponse.status === 200) {
+        console.log(`A tabela "${table}" foi criada com sucesso.`);
+      }
     } catch (error) {
       console.error(`Ocorreu um erro ao criar a tabela: ${error}`);
     }

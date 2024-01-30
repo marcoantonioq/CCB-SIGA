@@ -1,5 +1,5 @@
 import { reportDespesas } from "../app/siga/request/report_despesas";
-import { reportIgrejas } from "../app/siga/request/report_igrejas";
+import { reportIgrejas } from "../app/siga/request/report_alterar_igreja_para";
 
 test("igrejas", async () => {
   const result = await reportIgrejas();

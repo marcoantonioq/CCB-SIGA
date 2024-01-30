@@ -35,7 +35,7 @@ export async function saveGoogle(app: AppSIGA) {
     ["IGREJA", "DESCRIÇÃO", "STATUS"],
     (
       await app.repoTarefa.getAll()
-    ).map(({ id, description, igrejaId, status }) => [
+    ).map(({ description, igrejaId, status }) => [
       igrejas
         .find((i) => i.id === igrejaId)
         ?.nome.replace(/BR \d+-\d+ - /gi, "")
@@ -84,7 +84,7 @@ export async function saveGoogle(app: AppSIGA) {
     ...dadosGastos
       .filter((e) => e[0] && e[1])
       .map(([fluxo, igreja, categoria, data, valor, obs]) => {
-        const [yyyy, mm, dd] = data.split("-");
+        const [yyyy, mm, _dd] = data.split("-");
         return [
           fluxo,
           igreja,
@@ -138,7 +138,7 @@ export async function saveGoogle(app: AppSIGA) {
   await createData(
     "SIGA-Igrejas",
     ["ID", "IGREJA", "MEMBROS"],
-    igrejas.map(({ id, nome, membros }) => [
+    igrejas.map(({ id, nome }) => [
       Number(`${id}`),
       nome.replace(/BR \d+-\d+ - /gi, ""),
       Number(`${oldIgrejas.find((e) => nome.includes(e.nome))?.membros}`),

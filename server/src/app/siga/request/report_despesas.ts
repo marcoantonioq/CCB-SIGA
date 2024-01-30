@@ -33,11 +33,11 @@ export async function reportDespesas(data1: Date, data2: Date) {
   const formData = new FormData();
   formData.append(
     "f_data1",
-    new Date(data1).toISOString().split("T")[0].split("/").reverse().join("/")
+    data1?.toISOString().split("T")[0]?.split("-").reverse().join("/") || ""
   );
   formData.append(
     "f_data2",
-    new Date(data2).toISOString().split("T")[0].split("/").reverse().join("/")
+    data2?.toISOString().split("T")[0]?.split("-").reverse().join("/") || ""
   );
   formData.append("f_estabelecimento", "345");
   formData.append("f_centrocusto", "");
@@ -48,7 +48,7 @@ export async function reportDespesas(data1: Date, data2: Date) {
   formData.append("__initPage__", "S");
 
   try {
-    const response = await axios.post(
+    const { data: xls } = await axios.post(
       "https://siga.congregacao.org.br/TES/TES00902.aspx",
       formData,
       {
@@ -57,49 +57,46 @@ export async function reportDespesas(data1: Date, data2: Date) {
       }
     );
 
-    const workbook = xlsx.read(response.data, { type: "array" });
-    const jsonData = xlsx.utils.sheet_to_json(
-      workbook.Sheets[workbook.SheetNames[0]],
-      { header: 1 }
-    );
+    const workbook = xlsx.read(xls, { type: "array" });
+    const sheetName = workbook.SheetNames[0] || "";
+    const worksheet = workbook.Sheets[sheetName];
 
-    let Localidade: string, Ref: string;
+    if (worksheet) {
+      const jsonData = xlsx.utils.sheet_to_json(worksheet, {
+        header: 1,
+      });
 
-    jsonData.forEach((row) => {
-      if (Array.isArray(row) && row.length) {
-        if (/^Mês \d\d\/\d+/.test(`${row[0]}`)) {
-          const [, mm, yyyy] = row[0].match(/(\d\d)\/(\d{4})/);
-          Ref = `${mm}/${yyyy}`;
-        } else if (/^BR \d\d-\d+ - /.test(`${row[0]}`)) {
-          Localidade = row[0];
-        } else if (Number.isInteger(row[0]) && /\S+/.test(`${row[2]}`)) {
-          const despesa: Despesa = {
-            Ref,
-            Localidade,
-            Data: convertExcelDateToJSDate(row[0]),
-            Tipo: row[3],
-            NumeroDoc: row[4],
-            Despesa: row[6],
-            Fornecedor: row[8],
-            Valor: row[15],
-            Multa: row[21],
-            Juros: row[24],
-            Desconto: row[27],
-            Total: row[30],
-          };
-          despesas.push(despesa);
+      let Localidade: string, Ref: string;
+
+      jsonData.forEach((row) => {
+        if (Array.isArray(row) && row.length) {
+          if (/^Mês \d\d\/\d+/.test(`${row[0]}`)) {
+            const [, mm, yyyy] = row[0].match(/(\d{2})\/(\d{4})/);
+            Ref = `${mm}/${yyyy}`;
+          } else if (/^BR \d\d-\d+ - /.test(`${row[0]}`)) {
+            Localidade = row[0];
+          } else if (Number.isInteger(row[0]) && /\S+/.test(`${row[3]}`)) {
+            const despesa: Despesa = {
+              Ref,
+              Localidade,
+              Data: convertExcelDateToJSDate(row[0]),
+              Tipo: row[3],
+              NumeroDoc: row[4],
+              Despesa: row[6],
+              Fornecedor: row[8],
+              Valor: row[15],
+              Multa: row[21],
+              Juros: row[24],
+              Desconto: row[27],
+              Total: row[30],
+            };
+            despesas.push(despesa);
+          }
         }
-      }
-    });
-    return despesas;
+      });
+    }
   } catch (error) {
     console.error("Erro na requisição:", error);
-    return [];
   }
+  return despesas;
 }
-const first = new Date(),
-  last = new Date();
-first.setMonth(first.getMonth() - 2);
-reportDespesas(first, last).then((result) => {
-  console.log("Despesas: ", result, first, last);
-});

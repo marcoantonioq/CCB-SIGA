@@ -1,6 +1,6 @@
 import { google } from "googleapis";
-import path from "path";
-import fs from "fs";
+import * as path from "path";
+import * as fs from "fs";
 
 const credentials = JSON.parse(
   fs.readFileSync(path.join("src", "config", "secret.json"), "utf-8")

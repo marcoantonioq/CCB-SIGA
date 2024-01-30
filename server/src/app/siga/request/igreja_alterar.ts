@@ -2,7 +2,7 @@ import axios from "axios";
 import { AppConfig } from "../../../config";
 import { Igreja } from "../AppInterfaces";
 
-export async function igrejaAlterar(igreja: Igreja) {
+export async function alterarParaIgreja(igreja: Igreja) {
   const url = "https://siga.congregacao.org.br/page.aspx";
   const data = new FormData();
   if (!igreja || !igreja.id) return;
@@ -29,6 +29,6 @@ export async function igrejaAlterar(igreja: Igreja) {
     }
   } catch (erro) {
     console.log("Erro: ", erro);
-    return false;
   }
+  return false;
 }

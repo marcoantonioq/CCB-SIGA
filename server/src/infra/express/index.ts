@@ -1,8 +1,9 @@
 const PORT = process.env.PORT || 3000;
 
-import express, { Express, Request, Response, NextFunction } from "express";
-import bodyParser from "body-parser";
-import http from "http";
+import { Express, Request, Response, NextFunction } from "express";
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as http from "http";
 import { Server } from "socket.io";
 import { setupRoutes } from "./routes";
 import { setupSocketIO } from "./socket";
@@ -23,7 +24,7 @@ export function startHTTP(app: AppSIGA) {
   appExpress.use(express.urlencoded({ extended: true }));
   appExpress.use(bodyParser.json());
   appExpress.use(
-    (err: Error, req: Request, res: Response, next: NextFunction) => {
+    (err: Error, _req: Request, res: Response, _next: NextFunction) => {
       console.error(err.stack);
       res.status(500).send("Algo deu errado!");
     }
