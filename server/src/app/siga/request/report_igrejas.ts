@@ -18,13 +18,9 @@ export async function reportIgrejas() {
     throw "Você não está logado!\nAcesse o portal administrativo para enviar o cookie de autenticação...";
 
   $("ul#dropdown_localidades li").each((_index, li) => {
-    const id = $(li).attr("id") || "";
+    const cod = $(li).attr("id") || "";
     const nome = $(li).text().trim();
-    igrejas.push({ id, nome, membros: 0 });
+    igrejas.push({ cod, nome, membros: 0 });
   });
   return igrejas;
 }
-
-reportIgrejas().then((igrejas) => {
-  console.log("Igrejas: ", igrejas);
-});

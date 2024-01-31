@@ -6,7 +6,7 @@ export async function reportOfertas(data1: Date, data2: Date) {
   const ofertas: Fluxo[] = [];
   const url = "https://siga.congregacao.org.br/TES/TES00401.asmx/Selecionar";
 
-  const data = {
+  const payload = {
     data1: new Date(data1).toISOString().split("T")[0],
     data2: new Date(data2).toISOString().split("T")[0],
     config: {
@@ -19,19 +19,26 @@ export async function reportOfertas(data1: Date, data2: Date) {
     },
   };
 
-  const headers = {
-    Cookie: AppConfig.cookie,
-    __antixsrftoken: AppConfig.token,
+  const config = {
+    headers: {
+      Cookie: AppConfig.cookie,
+      __antixsrftoken: AppConfig.token,
+    },
   };
 
   try {
-    const result = await axios.post(url, data, { headers });
-    result.data.d.aaData.map((e: any) => {
+    const { data } = await axios.post(url, payload, config);
+    data.d.aaData.map((e: any) => {
       const [, m, y] = e.sData.split("/");
+      const data = new Date(String(e.sData).split("/").reverse().join("/"));
+      if (e.NomeTipoCulto.includes("RJM")) {
+        data.setHours(6, 30);
+      } else {
+        data.setHours(16, 30);
+      }
       ofertas.push(<Fluxo>{
-        id: String(e.Codigo),
         fluxo: "Entrada",
-        data: new Date(String(e.sData).split("/").reverse().join("/")),
+        data,
         ref: `${m}/${y}`,
         competencia: String(e.CodigoCompetencia),
         categoria: String(e.NomeTipoCulto),

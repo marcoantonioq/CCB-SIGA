@@ -6,7 +6,6 @@ import {
 import { FluxoRepositoryPrisma } from "./FluxoRepo";
 import { IgrejaRepositoryPrisma } from "./IgrejaRepo";
 import { TarefaRepositoryPrisma } from "./TarefaRepo";
-import { reportIgrejas } from "./request/report_alterar_igreja_para";
 import { reportDespesas } from "./request/report_despesas";
 
 export class AppSIGA {
@@ -42,16 +41,23 @@ export class AppSIGA {
         this.onSync = true;
 
         // Igrejas
-        let igrejas = await reportIgrejas();
-        console.info(`\nIgrejas coletadas: ${igrejas.length}`);
-        for (const igreja of igrejas) {
-          this.repoIgreja.save(igreja);
-        }
-        igrejas = await this.repoIgreja.getAll();
+        // let igrejas = await reportIgrejas();
+        // console.info(`\nIgrejas coletadas: ${igrejas.length}`);
+        // for (const igreja of igrejas) {
+        //   this.repoIgreja.save(igreja);
+        // }
+        // igrejas = await this.repoIgreja.getAll();
 
         // Despesas
         const despesas = await reportDespesas(firstDay, lastDay);
-        console.log("Despesa: ", despesas);
+        for (const despesa of despesas) {
+          try {
+            console.log("Despensa: ", despesa);
+            // this.repoFluxo.save(despesa);
+          } catch (error) {
+            console.log("Erro ao coletar despesa: ", error);
+          }
+        }
 
         // for (const igreja of igrejas) {
         //   await alterarParaIgreja(igreja);
@@ -72,7 +78,10 @@ export class AppSIGA {
         console.log("\n\nFIM!!!");
         return true;
       } catch (error) {
-        console.log("Erro na aplicação SIGA: ", error);
+        console.log(
+          "Verifique o login de acesso no arquivo de configuração: ",
+          error
+        );
         return false;
       } finally {
         this.onSync = false;

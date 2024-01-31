@@ -1,5 +1,5 @@
 import { reportDespesas } from "../app/siga/request/report_despesas";
-import { reportIgrejas } from "../app/siga/request/report_alterar_igreja_para";
+import { reportIgrejas } from "../app/siga/request/report_igrejas";
 import { alterarParaIgreja } from "src/app/siga/request/igreja_alterar";
 import { reportOfertas } from "src/app/siga/request/report_ofertas";
 

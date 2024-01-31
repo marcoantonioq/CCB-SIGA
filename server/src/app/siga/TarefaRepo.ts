@@ -48,6 +48,7 @@ export class TarefaRepositoryPrisma
         TarefaCore.create(e)
       );
     } catch (error) {
+      this.tarefas;
       console.error("Erro ao obter todas as tarefas: ", error);
       throw error;
     }

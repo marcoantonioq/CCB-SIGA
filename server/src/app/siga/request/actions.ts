@@ -279,7 +279,7 @@ export async function handleErro(erro: AxiosError): Promise<Error> {
     console.error("Erro na resposta da requisição:", erro.response.status);
     return new Error(`Erro na resposta: ${erro.response.data}`);
   } else if (erro.request) {
-    return new Error(`Erro na requisição (${erro.request}): ${erro.request}`);
+    return new Error(`Erro na requisição: (${erro.status})`);
   } else {
     return erro;
   }

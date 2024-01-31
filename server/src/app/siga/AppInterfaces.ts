@@ -1,29 +1,26 @@
-export type Igreja = {
-  id: string;
+export interface Igreja {
   nome: string;
-  membros: number | null;
-};
+  cod: string;
+  membros: number;
+}
 
-export type Tarefa = {
-  id: number;
-  description: string;
-  status: string;
-  igrejaId: string;
-};
-
-export type Fluxo = {
-  id: string;
+export interface Fluxo {
+  igreja: string;
   fluxo: "Entrada" | "Saída";
   categoria: string;
   data: Date;
   valor: number;
-  detalhes: string | null;
-  ref: string | null;
-  competencia: string | null;
-  created: Date;
-  updated: Date;
-  igrejaId: string;
-};
+  detalhes: string;
+  ref?: string;
+  created?: Date;
+  updated?: Date;
+}
+
+export interface Tarefa {
+  igreja: string;
+  description: string;
+  status: string;
+}
 
 export interface IgrejaRepository {
   getAll(): Promise<Igreja[]>;

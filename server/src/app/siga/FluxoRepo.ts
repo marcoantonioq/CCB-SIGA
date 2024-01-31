@@ -14,8 +14,9 @@ export class FluxoRepositoryPrisma
   async save(fluxo: Fluxo): Promise<Fluxo> {
     const obj = FluxoCore.create(fluxo);
     try {
+      const { igreja, categoria, data, detalhes } = obj;
       await database?.fluxo.upsert({
-        where: { id: obj.id },
+        where: { igreja, categoria, data, detalhes },
         update: obj,
         create: obj,
       });
@@ -29,11 +30,12 @@ export class FluxoRepositoryPrisma
 
   async delete(fluxo: Fluxo): Promise<Fluxo> {
     try {
-      const deleted = FluxoCore.create(
-        (await database?.fluxo.delete({
-          where: { id: fluxo.id },
-        })) as Fluxo
-      );
+      const deleted = FluxoCore.create(fluxo);
+      const { igreja, categoria, data, detalhes } = deleted;
+
+      await database?.fluxo.delete({
+        where: { igreja, categoria, data, detalhes },
+      });
       this.emit("deleted", deleted);
       return deleted;
     } catch (error) {
@@ -49,16 +51,18 @@ export class FluxoRepositoryPrisma
       );
     } catch (error) {
       console.error("Erro ao obter todos os fluxos: ", error);
+      this.fluxos;
       throw error;
     }
   }
 
-  async getById(id: string): Promise<Fluxo | undefined> {
+  async getById(_id: string): Promise<Fluxo | undefined> {
     try {
-      const fluxo = await database?.fluxo.findUnique({
-        where: { id },
-      });
-      if (fluxo) return FluxoCore.create(fluxo as Fluxo);
+      return;
+      // const fluxo = await database?.fluxo.findUnique({
+      //   where: { id },
+      // });
+      // if (fluxo) return FluxoCore.create(fluxo as Fluxo);
     } catch (error) {
       console.error("Erro ao obter fluxo por ID: ", error);
       throw error;

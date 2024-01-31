@@ -42,7 +42,8 @@ export function setupRoutes(router: Express, app: AppSIGA): void {
           date2,
         },
       };
-      await app.sync(new Date(date1), new Date(date2));
+      // alterar o codigo para corresponder a numero de meses e não periodo
+      await app.sync(1);
       await saveGoogle(app);
       res.status(200).json(responseData);
     } catch (error) {

@@ -37,6 +37,7 @@ export class IgrejaRepositoryPrisma
       this.emit("deleted", deleted);
       return deleted;
     } catch (error) {
+      this.igrejas;
       console.error("Erro ao excluir dados da igreja: ", igreja, error);
       throw error;
     }

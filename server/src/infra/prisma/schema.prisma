@@ -10,32 +10,33 @@ generator client {
 }
 
 model Igreja {
-    id      String   @id @unique
-    nome    String
+    nome    String   @id @unique
+    cod     String
     membros Int      @default(0)
     Fluxo   Fluxo[]
     Tarefas Tarefa[]
 }
 
 model Fluxo {
-    id          String    @id @unique
-    fluxo       String
-    categoria   String
-    data        DateTime
-    valor       Float     @default(0.0)
-    detalhes    String?
-    ref         String?
-    competencia String?
-    created     DateTime? @default(now())
-    updated     DateTime? @updatedAt
-    igrejaId    String
-    Igreja      Igreja    @relation(fields: [igrejaId], references: [id])
+    igreja    String
+    fluxo     String
+    categoria String
+    data      DateTime
+    valor     Float     @default(0.0)
+    detalhes  String
+    ref       String?
+    created   DateTime? @default(now())
+    updated   DateTime? @updatedAt
+    Igreja    Igreja    @relation(fields: [igreja], references: [nome])
+
+    @@id([igreja, categoria, data, detalhes])
 }
 
 model Tarefa {
-    id          Int    @id @default(autoincrement())
+    igreja      String
     description String
     status      String
-    igrejaId    String
-    Igreja      Igreja @relation(fields: [igrejaId], references: [id])
+    Igreja      Igreja @relation(fields: [igreja], references: [nome])
+
+    @@id([igreja, description])
 }

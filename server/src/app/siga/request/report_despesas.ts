@@ -27,7 +27,7 @@ export async function reportDespesas(
   data1: Date,
   data2: Date
 ): Promise<Fluxo[]> {
-  await alterarParaIgreja({ id: "345", nome: "", membros: 0 });
+  await alterarParaIgreja({ cod: "345", nome: "", membros: 0 });
   const despesas: Despesa[] = [];
 
   const headers = {
@@ -102,23 +102,21 @@ export async function reportDespesas(
       });
     }
   } catch (error) {
-    console.error("Erro na requisição:", error);
+    console.error("Erro na requisição ao siga!");
   }
 
-  return despesas.map(
-    (e) =>
-      <Fluxo>{
-        id: "",
-        fluxo: "Entrada",
-        categoria: e.Despesa,
-        data: e.Data,
-        valor: Number(e.Total),
-        detalhes: e.Fornecedor,
-        ref: e.Ref,
-        competencia: "",
-        created: new Date(),
-        updated: new Date(),
-        igrejaId: e.Localidade,
-      }
-  );
+  return despesas.map((e) => {
+    return <Fluxo>{
+      igreja: e.Localidade,
+      fluxo: "Saída",
+      categoria: e.Despesa,
+      data: e.Data,
+      valor: Number(e.Total),
+      detalhes: `${e.Fornecedor}, NF: ${e.NumeroDoc}`,
+      ref: e.Ref,
+      competencia: "",
+      created: new Date(),
+      updated: new Date(),
+    };
+  });
 }
