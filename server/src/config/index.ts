@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import { server } from "../infra/express";
 const { spawn } = require("child_process");
 
 const configPath = path.join(__dirname, "config.json");
@@ -21,7 +20,6 @@ export function saveConfig(): void {
     );
     setTimeout(() => {
       const processo = process;
-      server?.close();
       const newProcess = spawn(process.argv[0], processo.argv.slice(1), {
         stdio: "inherit",
       });

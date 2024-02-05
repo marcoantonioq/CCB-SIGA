@@ -10,8 +10,8 @@ generator client {
 }
 
 model Igreja {
-    nome    String   @id @unique
-    cod     String
+    cod     String   @id @unique
+    nome    String   @unique
     membros Int      @default(0)
     Fluxo   Fluxo[]
     Tarefas Tarefa[]

@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as xlsx from "xlsx";
-import { AppConfig } from "../../../config";
+import { AppConfig } from "../../config";
 import { alterarParaIgreja } from "./igreja_alterar";
-import { Fluxo } from "../AppInterfaces";
+import { Fluxo } from "@prisma/client";
 
 interface Despesa {
   Ref: string;
@@ -36,29 +36,26 @@ export async function reportDespesas(
     "Content-Type": "application/octet-stream",
   };
 
-  const formData = new FormData();
-  formData.append(
-    "f_data1",
-    data1?.toISOString().split("T")[0]?.split("-").reverse().join("/") || ""
-  );
-  formData.append(
-    "f_data2",
-    data2?.toISOString().split("T")[0]?.split("-").reverse().join("/") || ""
-  );
-  formData.append("f_estabelecimento", "345");
-  formData.append("f_centrocusto", "");
-  formData.append("f_fornecedor", "");
-  formData.append("f_formato", "TES00902.aspx");
-  formData.append("f_saidapara", "Excel");
-  formData.append("f_agrupar", "CentrodeCustoSetor");
-  formData.append("__initPage__", "S");
+  const requestData = {
+    f_data1:
+      data1?.toISOString().split("T")[0]?.split("-").reverse().join("/") || "",
+    f_data2:
+      data2?.toISOString().split("T")[0]?.split("-").reverse().join("/") || "",
+    f_estabelecimento: "345",
+    f_centrocusto: "",
+    f_fornecedor: "",
+    f_formato: "TES00902.aspx",
+    f_saidapara: "Excel",
+    f_agrupar: "CentrodeCustoSetor",
+    __initPage__: "S",
+  };
 
   try {
-    const { data: xls } = await axios.post(
+    const { data: xls } = await axios.get(
       "https://siga.congregacao.org.br/TES/TES00902.aspx",
-      formData,
       {
         headers,
+        params: requestData,
         responseType: "arraybuffer",
       }
     );
@@ -79,7 +76,8 @@ export async function reportDespesas(
           if (/^Mês \d\d\/\d+/.test(`${row[0]}`)) {
             const [, mm, yyyy] = row[0].match(/(\d{2})\/(\d{4})/);
             Ref = `${mm}/${yyyy}`;
-          } else if (/^BR \d\d-\d+ - /.test(`${row[0]}`)) {
+          } else if (/^(BR \d+-\d+|^ADM|^PIA)/.test(`${row[0]}`)) {
+            console.log("Localidade: ", row[0]);
             Localidade = row[0];
           } else if (Number.isInteger(row[0]) && /\S+/.test(`${row[3]}`)) {
             const despesa: Despesa = {
@@ -105,6 +103,8 @@ export async function reportDespesas(
     console.error("Erro na requisição ao siga!");
   }
 
+  // console.log("Despesas:", despesas[0]);
+
   return despesas.map((e) => {
     return <Fluxo>{
       igreja: e.Localidade,
@@ -114,7 +114,6 @@ export async function reportDespesas(
       valor: Number(e.Total),
       detalhes: `${e.Fornecedor}, NF: ${e.NumeroDoc}`,
       ref: e.Ref,
-      competencia: "",
       created: new Date(),
       updated: new Date(),
     };

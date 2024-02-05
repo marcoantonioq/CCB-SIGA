@@ -1,6 +1,6 @@
 import axios from "axios";
-import { AppConfig } from "../../../config";
-import { Fluxo } from "../AppInterfaces";
+import { AppConfig } from "../../config";
+import { Fluxo } from "@prisma/client";
 
 export async function reportOfertas(data1: Date, data2: Date) {
   const ofertas: Fluxo[] = [];
@@ -37,12 +37,13 @@ export async function reportOfertas(data1: Date, data2: Date) {
         data.setHours(16, 30);
       }
       ofertas.push(<Fluxo>{
+        igreja: "",
         fluxo: "Entrada",
-        data,
-        ref: `${m}/${y}`,
-        competencia: String(e.CodigoCompetencia),
         categoria: String(e.NomeTipoCulto),
+        data,
         valor: Number(e.ValorTotal),
+        detalhes: "",
+        ref: `${m}/${y}`,
         updated: new Date(),
         created: new Date(),
       });
@@ -53,6 +54,6 @@ export async function reportOfertas(data1: Date, data2: Date) {
   return ofertas;
 }
 
-reportOfertas(new Date("2023-12-01"), new Date("2024-02-01")).then((result) => {
-  console.log("Ofertas: ", result);
-});
+// reportOfertas(new Date("2023-12-01"), new Date("2024-02-01")).then((result) => {
+//   console.log("Ofertas: ", result);
+// });

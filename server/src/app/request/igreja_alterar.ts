@@ -1,6 +1,6 @@
 import axios from "axios";
-import { AppConfig } from "../../../config";
-import { Igreja } from "../AppInterfaces";
+import { AppConfig } from "../../config";
+import { Igreja } from "@prisma/client";
 
 export async function alterarParaIgreja(igreja: Igreja) {
   const url = "https://siga.congregacao.org.br/page.aspx";

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { AppConfig } from "../../../config";
+import { AppConfig } from "../../config";
 import * as cheerio from "cheerio";
-import { Igreja } from "../AppInterfaces";
+import { Igreja } from "@prisma/client";
 
 export async function reportIgrejas() {
   const url = "https://siga.congregacao.org.br/SIS/SIS99908.aspx";
