@@ -100,7 +100,9 @@ export async function reportDespesas(
       });
     }
   } catch (error) {
-    console.error("Erro na requisição ao siga!");
+    const msg = "Erro na requisição ao siga!";
+    console.error(msg);
+    throw msg;
   }
 
   // console.log("Despesas:", despesas[0]);

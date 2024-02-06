@@ -18,4 +18,4 @@ schedule.scheduleJob("0 0 */2 * *", async () => {
   await startSync(1);
 });
 
-startSync(1);
+startSync(2);

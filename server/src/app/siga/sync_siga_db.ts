@@ -32,13 +32,16 @@ export async function syncSigaDB(months: number) {
         });
       }
 
-      // Limpando entrada e saída (Fluxos)
-      await database?.fluxo.deleteMany({
-        where: { data: { gte: firstDay, lte: lastDay } },
-      });
-
       // Despesas
       const despesas = await reportDespesas(firstDay, lastDay);
+
+      // Limpando entrada e saída (Fluxos)
+      if (despesas.length) {
+        await database?.fluxo.deleteMany({
+          where: { data: { gte: firstDay, lte: lastDay } },
+        });
+      }
+
       for (const despesa of despesas) {
         try {
           const { igreja, categoria, data, detalhes } = despesa;
