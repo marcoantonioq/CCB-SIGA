@@ -6,6 +6,7 @@ process.env.TZ = "Europe/London";
 
 async function startSync(months: number) {
   try {
+    await syncDbSheet();
     await syncSigaDB(months);
     await syncDbSheet();
   } catch (error) {
