@@ -1,5 +1,4 @@
-database.db
 dist
-migrations
 node_modules
 package-lock.json
+server/src/db

@@ -1,7 +1,7 @@
 import { reportDespesas } from "../app/request/report_despesas";
 import { reportIgrejas } from "../app/request/report_igrejas";
-import { alterarParaIgreja } from "src/app/request/igreja_alterar";
-import { reportOfertas } from "src/app/request/report_ofertas";
+import { alterarParaIgreja } from "../app/request/igreja_alterar";
+import { reportOfertas } from "../app/request/report_ofertas";
 
 describe("Relatórios", () => {
   test("despesas", async () => {

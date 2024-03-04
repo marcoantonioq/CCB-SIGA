@@ -99,11 +99,7 @@ export async function syncSigaDB(months: number) {
         }
       }
     } catch (error) {
-      console.log(
-        "Verifique o login de acesso no arquivo de configuração: ",
-        error
-      );
-      return false;
+      throw "Verifique o login de acesso no arquivo de configuração!";
     } finally {
       onSync = false;
     }

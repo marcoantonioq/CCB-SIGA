@@ -3,7 +3,10 @@ import * as path from "path";
 import * as fs from "fs";
 
 const credentials = JSON.parse(
-  fs.readFileSync(path.join("src", "config", "secret.json"), "utf-8")
+  fs.readFileSync(
+    path.join(__dirname, "../../../../../config/secret.json"),
+    "utf-8"
+  )
 );
 
 export const auth = new google.auth.GoogleAuth({

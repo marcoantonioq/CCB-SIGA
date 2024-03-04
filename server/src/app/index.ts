@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 const { spawn } = require("child_process");
 
-const configPath = path.join(__dirname, "config.json");
+const configPath = path.join(__dirname, "../../../config/config.json");
 
 export interface Config {
   cookie: string;

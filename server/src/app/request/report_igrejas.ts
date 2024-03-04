@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AppConfig } from "../../config";
+import { AppConfig } from "..";
 import * as cheerio from "cheerio";
 import { Igreja } from "@prisma/client";
 

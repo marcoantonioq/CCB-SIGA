@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AppConfig } from "../../config";
+import { AppConfig } from "..";
 import { Igreja } from "@prisma/client";
 
 export async function alterarParaIgreja(igreja: Igreja) {

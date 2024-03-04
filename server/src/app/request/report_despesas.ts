@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as xlsx from "xlsx";
-import { AppConfig } from "../../config";
+import { AppConfig } from "..";
 import { alterarParaIgreja } from "./igreja_alterar";
 import { Fluxo } from "@prisma/client";
 

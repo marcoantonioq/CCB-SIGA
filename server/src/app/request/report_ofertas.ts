@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AppConfig } from "../../config";
+import { AppConfig } from "..";
 import { Fluxo } from "@prisma/client";
 
 export async function reportOfertas(data1: Date, data2: Date) {

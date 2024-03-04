@@ -1,19 +1,10 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "outDir": "dist",
-    "baseUrl": ".",
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "sourceMap": true,
-    "resolveJsonModule": true
+    "target": "es2015",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true
   },
-  "include": ["src", "test"],
-  "exclude": ["dist", "dist", "node_modules"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

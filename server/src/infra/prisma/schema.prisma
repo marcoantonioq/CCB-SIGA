@@ -1,7 +1,7 @@
 // Definições relacionadas ao banco de dados
 datasource db {
     provider = "sqlite"
-    url      = "file:../../db/database.db"
+    url      = "file:../../../../db/database.db"
 }
 
 // Configurações do Prisma Client
