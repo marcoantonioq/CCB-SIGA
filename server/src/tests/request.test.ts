@@ -1,7 +1,8 @@
-import { reportDespesas } from "../app/request/report_despesas";
-import { reportIgrejas } from "../app/request/report_igrejas";
-import { alterarParaIgreja } from "../app/request/igreja_alterar";
-import { reportOfertas } from "../app/request/report_ofertas";
+import { reportDespesas } from "../lib/report_despesas";
+import { reportIgrejas } from "../lib/report_igrejas";
+import { alterarParaIgreja } from "../lib/igreja_alterar";
+import { reportOfertas } from "../lib/report_ofertas";
+import { app } from "../app";
 
 describe("Relatórios", () => {
   test("despesas", async () => {
@@ -22,7 +23,7 @@ describe("Relatórios", () => {
   });
 
   test("igrejas", async () => {
-    const result = await reportIgrejas();
+    const result = await reportIgrejas(app);
     expect(result.length).toBeGreaterThan(0);
   });
 });

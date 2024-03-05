@@ -1,13 +1,12 @@
-import GoogleSheetsService from "../../modules/google/sheet";
-import { database } from "../../infra/prisma";
+import GoogleSheetsService from "../modules/google/sheet";
+import { database } from "../infra/prisma";
+import { App } from "../app";
 
 /**
  * Google Sheet
  */
 
-const sheet = new GoogleSheetsService(
-  "1XDAsCKakSE-7N3xyAnmg3OXFCbdt2ELTfi7MGe-u_JA"
-);
+let sheet: GoogleSheetsService | null = null;
 const DEFAULTS_IGREJAS = [
   { nome: "GOIÁS - POVOADO DE AREIAS", membros: 37 },
   { nome: "POVOADO DE MIRANDÓPOLIS", membros: 18 },
@@ -21,8 +20,8 @@ async function createData(range: string, headers: string[], values: any[][]) {
   try {
     if (values.length) {
       values.unshift(headers);
-      await sheet.clearTable(range);
-      await sheet.updateTable(range, values);
+      await sheet?.clearTable(range);
+      await sheet?.updateTable(range, values);
     }
   } catch (error) {
     console.log("Erro ao enviar para o google: ", error);
@@ -44,10 +43,11 @@ function formatIgreja(nome: string): string {
   return nome.replace(/BR \d+-\d+ - /gi, "").trim() || "";
 }
 
-export async function syncDbSheet() {
+export async function syncDbSheet(app: App) {
   console.log("Enviado para o Google Sheet...");
 
   try {
+    sheet = new GoogleSheetsService(app.google.sheetID, app.google.secret);
     // IGREJAS
     const igrejas = await database.igreja.findMany();
     await createData(

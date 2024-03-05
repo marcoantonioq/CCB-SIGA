@@ -1,11 +1,18 @@
 import { google, sheets_v4 } from "googleapis";
-import { auth } from "../auth";
+import { Secret } from "../../../app";
 
 class GoogleSheetsService {
   public readonly sheets: sheets_v4.Sheets;
   public properties: { sheetId: number; title: string }[] = [];
 
-  constructor(public readonly spreadsheetId: string) {
+  constructor(public readonly spreadsheetId: string, secret: Secret) {
+    const auth = new google.auth.GoogleAuth({
+      credentials: secret,
+      scopes: [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/spreadsheets",
+      ],
+    });
     this.sheets = google.sheets({ version: "v4", auth });
     this.getAllSheetProperties();
   }

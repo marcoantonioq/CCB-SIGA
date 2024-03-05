@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as xlsx from "xlsx";
-import { AppConfig } from "..";
 import { alterarParaIgreja } from "./igreja_alterar";
 import { Fluxo } from "@prisma/client";
+import { app } from "../app";
 
 interface Despesa {
   Ref: string;
@@ -31,8 +31,8 @@ export async function reportDespesas(
   const despesas: Despesa[] = [];
 
   const headers = {
-    Cookie: AppConfig.cookie,
-    __antixsrftoken: AppConfig.token,
+    Cookie: app.config.cookie,
+    __antixsrftoken: app.config.token,
     "Content-Type": "application/octet-stream",
   };
 

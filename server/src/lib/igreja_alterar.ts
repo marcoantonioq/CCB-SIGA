@@ -1,6 +1,6 @@
 import axios from "axios";
-import { AppConfig } from "..";
-import { Igreja } from "@prisma/client";
+import { app } from "../app";
+import { Igreja } from "../app";
 
 export async function alterarParaIgreja(igreja: Igreja) {
   const url = "https://siga.congregacao.org.br/page.aspx";
@@ -12,8 +12,8 @@ export async function alterarParaIgreja(igreja: Igreja) {
   const config = {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: AppConfig.cookie,
-      __antixsrftoken: AppConfig.token,
+      Cookie: app.config.cookie,
+      __antixsrftoken: app.config.token,
     },
   };
 

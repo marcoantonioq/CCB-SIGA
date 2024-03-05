@@ -1,29 +1,29 @@
-import { database } from "../../infra/prisma";
-import { reportDespesas } from "../request/report_despesas";
-import { reportIgrejas } from "../request/report_igrejas";
-import { alterarParaIgreja } from "../request/igreja_alterar";
-import { reportOfertas } from "../request/report_ofertas";
+import { database } from "../infra/prisma";
+import { reportDespesas } from "./report_despesas";
+import { reportIgrejas } from "./report_igrejas";
+import { alterarParaIgreja } from "./igreja_alterar";
+import { reportOfertas } from "./report_ofertas";
+import { App } from "../app";
 
-let onSync = false;
-
-export async function syncSigaDB(months: number) {
+export async function syncSigaDB(app: App) {
   const date = new Date();
-  for (let i = 0; i < months; i++) {
+  if (app.onSync) {
+    throw new Error("Já está realizando a sincronização!!!");
+  }
+  app.onSync = true;
+
+  console.log("Sync...");
+  for (let i = 0; i < app.config.monthsSync; i++) {
     const year = date.getFullYear();
     const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 1);
-    console.log(
-      `Filtrando entre ${firstDay.toISOString()} e ${lastDay.toISOString()}`
-    );
     try {
-      if (onSync) {
-        throw new Error("Já está realizando a sincronização!!!");
-      }
-      onSync = true;
-
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 1);
+      console.log(
+        `Filtrando entre ${firstDay.toISOString()} e ${lastDay.toISOString()}`
+      );
       // Igrejas
-      let igrejas = await reportIgrejas();
+      let igrejas = await reportIgrejas(app);
       for (const igreja of igrejas) {
         await database?.igreja.upsert({
           where: { cod: igreja.cod },
@@ -100,9 +100,8 @@ export async function syncSigaDB(months: number) {
       }
     } catch (error) {
       throw "Verifique o login de acesso no arquivo de configuração!";
-    } finally {
-      onSync = false;
     }
     date.setMonth(date.getMonth() - 1);
   }
+  app.onSync = false;
 }

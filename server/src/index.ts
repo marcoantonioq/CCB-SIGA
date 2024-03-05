@@ -1,22 +1,27 @@
 import * as schedule from "node-schedule";
-import { syncSigaDB } from "./app/siga/sync_siga_db";
-import { syncDbSheet } from "./app/siga/sync_db_sheet";
+import { startSTORE } from "./modules/localstore";
+import { app } from "./app";
+import { syncSigaDB } from "./lib/sync_siga_db";
+import { syncDbSheet } from "./lib/sync_db_sheet";
 
 process.env.TZ = "Europe/London";
 
-async function startSync(months: number) {
+async function startSync() {
+  await startSTORE(app);
   try {
-    await syncDbSheet();
-    await syncSigaDB(months);
-    await syncDbSheet();
+    await syncDbSheet(app);
+    await syncSigaDB(app);
+    await syncDbSheet(app);
   } catch (error) {
-    console.log("Falha ao realizar o sync siga!!!");
+    console.log("Falha ao realizar o sync siga: ", error);
   }
 }
 
 // Cada duas horas
-schedule.scheduleJob("0 0 */2 * *", async () => {
-  await startSync(1);
+schedule.scheduleJob("*/10 * * * *", async () => {
+  console.log("Atualizar de 10 em 10 min...");
+  await syncSigaDB(app);
+  await syncDbSheet(app);
 });
 
-startSync(2);
+startSync();

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { AppConfig } from "..";
 import { Fluxo } from "@prisma/client";
+import { app } from "../app";
 
 export async function reportOfertas(data1: Date, data2: Date) {
   const ofertas: Fluxo[] = [];
@@ -21,8 +21,8 @@ export async function reportOfertas(data1: Date, data2: Date) {
 
   const config = {
     headers: {
-      Cookie: AppConfig.cookie,
-      __antixsrftoken: AppConfig.token,
+      Cookie: app.config.cookie,
+      __antixsrftoken: app.config.token,
     },
   };
 
