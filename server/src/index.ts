@@ -18,8 +18,8 @@ async function startSync() {
 }
 
 // Cada duas horas
-schedule.scheduleJob("*/10 * * * *", async () => {
-  console.log("Atualizar de 10 em 10 min...");
+schedule.scheduleJob("*/30 * * * *", async () => {
+  console.log("Atualizar de 30 em 30 min...");
   await syncSigaDB(app);
   await syncDbSheet(app);
 });

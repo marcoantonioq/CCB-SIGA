@@ -1,4 +1,4 @@
-import GoogleSheetsService from "../modules/google/sheet";
+import GoogleSheetsService from "./google_sheet";
 import { database } from "../infra/prisma";
 import { App } from "../app";
 

@@ -1,5 +1,5 @@
 import { google, sheets_v4 } from "googleapis";
-import { Secret } from "../../../app";
+import { Secret } from "../app";
 
 class GoogleSheetsService {
   public readonly sheets: sheets_v4.Sheets;
