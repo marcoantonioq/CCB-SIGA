@@ -6,6 +6,7 @@ import { reportOfertas } from "./report_ofertas";
 import { App } from "../app";
 
 export async function syncSigaDB(app: App) {
+  if (!app.config.monthsSync) throw "Nenhum período monthSync informado!";
   const date = new Date();
   if (app.onSync) {
     throw new Error("Já está realizando a sincronização!!!");

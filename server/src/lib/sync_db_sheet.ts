@@ -47,6 +47,7 @@ export async function syncDbSheet(app: App) {
   console.log("Enviado para o Google Sheet...");
 
   try {
+    if (!app.google.secret.client_email) throw "Nenhum client google iniciado!";
     sheet = new GoogleSheetsService(app.google.sheetID, app.google.secret);
     // IGREJAS
     const igrejas = await database.igreja.findMany();

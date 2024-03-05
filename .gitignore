@@ -2,6 +2,8 @@ package-lock.json
 node_modules
 database.db
 database.db-journal
-config.json
 secret.json
 dist
+config/
+db/
+config.json

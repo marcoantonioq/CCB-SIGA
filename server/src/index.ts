@@ -7,8 +7,8 @@ import { syncDbSheet } from "./lib/sync_db_sheet";
 process.env.TZ = "Europe/London";
 
 async function startSync() {
-  await startSTORE(app);
   try {
+    await startSTORE(app);
     await syncDbSheet(app);
     await syncSigaDB(app);
     await syncDbSheet(app);
@@ -19,9 +19,13 @@ async function startSync() {
 
 // Cada duas horas
 schedule.scheduleJob("*/30 * * * *", async () => {
-  console.log("Atualizar de 30 em 30 min...");
-  await syncSigaDB(app);
-  await syncDbSheet(app);
+  try {
+    console.log("Atualizar de 30 em 30 min...");
+    await syncSigaDB(app);
+    await syncDbSheet(app);
+  } catch (error) {
+    console.log("Erro ao scheduleJob: ", error);
+  }
 });
 
 startSync();

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "npx ts-node-dev ./src/index.ts || npm run migrate",
+    "dev": "npx ts-node-dev ./src/index.ts",
     "migrate": "PRISMA_MIGRATE_NON_INTERACTIVE=true prisma migrate dev --name init --schema src/infra/prisma/schema.prisma"
   },
   "author": "",

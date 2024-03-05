@@ -1,6 +1,6 @@
 import { promises as fs, existsSync } from "fs";
 import * as path from "path";
-import { watch, watchEffect } from "vue";
+import { watch } from "vue";
 import { App } from "../../app";
 import { updateApp } from "../../lib/updateApp";
 
@@ -12,7 +12,7 @@ async function saveDataToFile(path: string, values: string) {
 
 async function readDataFromFile(path: string, values: string) {
   if (existsSync(path)) {
-    return JSON.parse(await fs.readFile(path, "utf-8"));
+    return JSON.parse((await fs.readFile(path, "utf-8")) || "{}");
   } else {
     console.log(`Criando arquivo de configuração ${path}...`);
     await saveDataToFile(path, values);
