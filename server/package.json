@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "npx ts-node-dev ./src/index.ts || npm run migrate",
+    "dev": "npm run migrate; npx ts-node-dev ./src/index.ts",
     "migrate": "PRISMA_MIGRATE_NON_INTERACTIVE=true prisma migrate dev --name init --schema src/infra/prisma/schema.prisma"
   },
   "author": "",
@@ -18,14 +18,14 @@
     "express": "^4.18.2",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
-    "prisma": "^5.7.1",
+    "prisma": "^5.10.2",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.1",
+    "@prisma/client": "^5.10.2",
     "axios": "^1.6.3",
     "cheerio": "^1.0.0-rc.12",
     "crypto": "^1.0.1",
