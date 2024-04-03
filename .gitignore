@@ -4,6 +4,6 @@ database.db
 database.db-journal
 secret.json
 dist
-config/
+config/*
 db/
 config.json
