@@ -21,6 +21,7 @@ async function startSync() {
 schedule.scheduleJob("*/30 * * * *", async () => {
   try {
     console.log("Atualizar de 30 em 30 min...");
+    await startSTORE(app);
     await syncSigaDB(app);
     await syncDbSheet(app);
   } catch (error) {

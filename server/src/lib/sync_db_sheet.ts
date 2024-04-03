@@ -14,6 +14,22 @@ const DEFAULTS_IGREJAS = [
   { nome: "GOIÁS - POVOADO COLÔNIA DE UVÁ", membros: 15 },
   { nome: "GOIÁS - CENTRO", membros: 96 },
   { nome: "GOIÁS - VILA LIONS", membros: 28 },
+  { nome: "VILA LEONOR", membros: 214 },
+  { nome: "FAZENDA MATO DENTRO", membros: 20 },
+  { nome: "FAZENDA SOBRADINHO", membros: 18 },
+  { nome: "JARDIM CRISTINA", membros: 90 },
+  { nome: "POVOADO CALCILÂNDIA", membros: 37 },
+  { nome: "POVOADO OLHO D'ÁGUA DE SÃO BENEDITO", membros: 35 },
+  { nome: "POVOADO SANTA RITA", membros: 67 },
+  { nome: "VILA COMUNITÁRIA", membros: 137 },
+  { nome: "VILA PROGRESSO", membros: 102 },
+  { nome: "AMERICANO DO BRASIL - SETOR CENTRAL", membros: 56 },
+  { nome: "GOIÁS - CENTRO", membros: 96 },
+  { nome: "GOIÁS - POVOADO COLÔNIA DE UVÁ", membros: 15 },
+  { nome: "GOIÁS - POVOADO DE AREIAS", membros: 37 },
+  { nome: "GOIÁS - VILA LIONS", membros: 28 },
+  { nome: "MOSSÂMEDES - VILA DAMIANA DA CUNHA", membros: 55 },
+  { nome: "POVOADO DE MIRANDÓPOLIS", membros: 18 },
 ];
 
 async function createData(range: string, headers: string[], values: any[][]) {
